@@ -27,74 +27,69 @@ var app = {
   //dim: 5,
   //board : Array.matrix(this.dim, this.dim, 0),
   board : [[0,0,0,0,0],
+          [0,0,0,0,0],
           [0,0,1,0,0],
-          [0,1,0,1,0],
-          [0,0,1,0,0],
+          [0,0,0,0,0],
           [0,0,0,0,0]],
-
   process_board : function (board) {
-    for (let t = 0; t < 6; t++) {
+    for (var t = 0; t < 1; t++) {
       // iterate board
-      let board_copy = this.board;
+      var board_copy = this.board;
       for (i = 0; i < this.board.length; i++) {
         for (j = 0; j < this.board[i].length; j++) {
-          let n = this.count_neighbors(board_copy, i, j);
-          console.log(i,j,n);
-          // TODO broken by the time it gets to the third iteration
-          if (board_copy[i][j] === 1 && this.check_condition1(n)) {
+          var n = this.count_neighbors(board_copy, i, j);
+          if (board_copy[i][j] == 1 && this.check_condition1(n)) {
             board[i][j] = 0;
           }
-          if (board_copy[i][j] === 0 && this.check_condition2(n)) {
+          if (board_copy[i][j] == 0 && this.check_condition2(n)) {
             board[i][j] = 1;
           }
         }
       }
-      console.log("interation number: " + (t + 1));
-      console.table(board);
+      //console.table(board);
     }
   },
 
   // implement rule1, check given position against a copy of the board
-  count_neighbors: function (board, x, y) {
-    let neighbors = 0;
-    let l = board.length - 1;
-    // TODO make this less complex
-    if (!(x === 0 || y === 0)) {
-      if (board[x-1][y-1] === 1) {
-        console.log("top left worked");
+  count_neighbors : function (board, x, y) {
+    var neighbors = 0;
+    // conditional logic
+    // TODO work out specifics of javascript's try catch
+    try {
+      if (board[x-1][y-1] == 1) {
         neighbors += 1
       }
-    }
-    if (y !== 0) {
-      if (board[x][y-1] === 1) {
+    } catch (e) {}
+    try {
+      if (board[x][y-1] == 1) {
         neighbors += 1
       }
-    }
-    if (!(x === l || y === 0)) {
-      if (board[x+1][y-1] === 1) {
+    } catch (e) {}
+    try {
+      if (board[x+1][y-1] == 1) {
         neighbors += 1
       }
-    }
-    if (x !== 0) {
-      if (board[x-1][y] === 1) {
+    } catch (e) {}
+    try {
+      if (board[x-1][y] == 1) {
         neighbors += 1
       }
-    }
-    if (!(x === l || y === 0)) {
-      if (board[x+1][y-1] === 1) {
+    } catch (e) {}
+    try {
+      if (board[x+1][y-1] == 1) {
         neighbors += 1
       }
-    }
-    if (y !== l) {
-      if (board[x][y+1] === 1) {
+    } catch (e) {}
+    try {
+      if (board[x][y+1] == 1) {
         neighbors += 1
       }
-    }
-    if (!(x === l || y === l)) {
-      if (board[x+1][y+1] === 1) {
+    } catch (e) {}
+    try {
+      if (board[x+1][y+1] == 1) {
         neighbors += 1
       }
-    }
+    } catch (e) {}
     return neighbors;
   },
 
@@ -111,7 +106,7 @@ var app = {
   },
 
   check_condition2 : function (neighbors) {
-    if (neighbors === 3) {
+    if (neighbors == 3) {
       return true;
     }
     else {
@@ -129,12 +124,23 @@ var app = {
     }
     document.getElementById("array4").innerHTML = "-".repeat(2*dim + 1) + "<br>";
   }
-  
+
+
 }
 
 
 // create game of life board
-console.log("initial board state: ")
+app.board[2][3] = 1;
+app.board[1][2] = 1;
 console.table(app.board);
-console.log("running game...")
-app.process_board(app.board);
+
+app.gobbles = function () {
+  app.board[1,1] = 1;
+  app.board[1,0] = 1;
+  console.table(app.board);
+}
+app.gobbles();
+//app.process_board(app.board);
+//console.table(app.board);
+// TODO problem: every iteration of the array is being printed as all zeros!?!?!
+// need to sort out scope
